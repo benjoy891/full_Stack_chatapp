@@ -1,14 +1,26 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .models import Server
-from .serializer import ServerSerializer, ChannelSerializer
+from .models import Server, Category
+from .serializer import ServerSerializer, ChannelSerializer, CategorySerializer
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from django.db.models import Count
 from .schema import server_list_docs
+from drf_spectacular.utils import extend_schema
 
 
 # Create your views here.
+
+class CategoryListViewSet(viewsets.ViewSet):
+    queryset = Category.objects.all()
+
+    @extend_schema(responses=CategorySerializer)
+    def list(self, request):
+        serializer = CategorySerializer(self.queryset, many=True)
+        return Response(serializer.data)
+    
+
 
 class ServerListViewSet(viewsets.ViewSet):
     """
@@ -64,6 +76,7 @@ class ServerListViewSet(viewsets.ViewSet):
     """
 
     queryset = Server.objects.all()
+    # permission_classes = [IsAuthenticated]
 
     @server_list_docs
     def list(self, request):
