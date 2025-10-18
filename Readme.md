@@ -1,6 +1,3 @@
-@@ -1,73 +1,34 @@
-Chat Application for Interest-Based Communication
-
 # Chat Application for Interest-Based Communication
 
 ## Overview
